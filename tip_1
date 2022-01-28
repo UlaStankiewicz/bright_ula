@@ -1,0 +1,23 @@
+# STEP 1: UPLOAD YOUR AUDIO FILE AND GET URL
+import requests
+
+filename = '/Users/frankandrade/Desktop/Steve Jobs.mp3'  # Your path goes here
+api_key =  # Your API key goes here
+upload_endpoint = 'https://api.assemblyai.com/v2/upload'
+
+def read_file(filename, chunk_size=5242880):
+    with open(filename, 'rb') as f:
+        while True:
+            data = f.read(chunk_size)
+            if not data:
+                break
+            yield data
+
+
+headers = {'authorization': api_key,
+           'content-type': 'application/json'}
+response = requests.post(upload_endpoint,
+                         headers=headers,
+                         data=read_file(filename))
+
+audio_url = response.json()['upload_url']
